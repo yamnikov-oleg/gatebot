@@ -1,0 +1,16 @@
+version: '3'
+services:
+  bot:
+    build: .
+    volumes:
+      - ./data:/app/data:rw
+    ports:
+      - 8443:8443
+    restart: always
+  redis:
+    # Change redis host in config to "redis"
+    image: redis:4-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - ./redis-data:/data:rw
+    restart: always
