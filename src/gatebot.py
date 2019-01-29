@@ -672,7 +672,7 @@ class GateCommands(object):
                 reply_markup = InlineKeyboardMarkup(keyboard)
                 update.message.reply_text(
                     config["STRINGS"]["start_message"].format(
-                        username=from_username,
+                        username=from_username or "fellow pythonist",
                         start=config["COMMANDS"]["start"],
                         correct_answers=config["GENERAL"]["correct_answers"],
                         questions_count=config["GENERAL"]["questions_count"]),
