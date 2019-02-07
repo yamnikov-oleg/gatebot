@@ -277,7 +277,13 @@ class GateButtons(object):
         name: str = f"user:questions:{user_id}"
         name_results: str = f"user:results:{user_id}"
         user_questions = json.loads(rdb.get(name))
+
         question_number = int(rdb.hget(f"user:{user_id}", "question"))
+        questions_count = int(config["GENERAL"]["questions_count"])
+        if question_number < 0 or question_number >= questions_count:
+            question_number = 0
+            rdb.hset(f"user:{user_id}", "question", question_number)
+
         current_question = user_questions[question_number]
         question_id = quizzes["quizzes"].index(current_question)
         user_question_id = user_questions.index(current_question)
