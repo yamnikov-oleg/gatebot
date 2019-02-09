@@ -254,13 +254,22 @@ class GateButtons(object):
     """
     def ready_handler(self, bot: Bot, update: Update) -> None:
         user_id: int = self.query.from_user.id
+
+        waits_since = float(rdb.get(f"user:wait:{user_id}") or 0)
+        waited_seconds = time.time() - waits_since
+        must_wait_seconds = int(config["USER"]["failed_user_wait"])
+        if waits_since and waited_seconds > must_wait_seconds:
+            rdb.delete(f"user:questions:{user_id}")
+            rdb.delete(f"user:results:{user_id}")
+            rdb.delete(f"user:wait:{user_id}")
+
         name: str = f"user:questions:{user_id}"
         rdb.setnx(name,
                   json.dumps(random.sample(
                                 quizzes["quizzes"],
                                 int(config["GENERAL"]["questions_count"])),
                              sort_keys=True))
-        rdb.hsetnx(f"user:{user_id}", "question", 0)
+        rdb.hset(f"user:{user_id}", "question", 0)
         # no need to do it with my old shitty way
         # i was just trying to make it work back then
         # so...
