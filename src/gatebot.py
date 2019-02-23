@@ -210,15 +210,6 @@ class GateHandlers(object):
                         can_send_media_messages=False,
                         can_send_other_messages=False,
                         can_add_web_page_previews=False)
-                    ans = int(config['GENERAL']['correct_answers'])
-                    que = int(config['GENERAL']['questions_count'])
-                    update.message.reply_text(
-                        text=config["STRINGS"]["send_me_start"].format(
-                            correct_answers=ans,
-                            questions_count=que,
-                            calc_percentage=f"{int((ans/que)*100)}"),
-                        parse_mode="Markdown",
-                        disable_web_page_preview=True)
 
 
 class GateButtons(object):
